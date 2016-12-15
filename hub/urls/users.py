@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from ..views import user
+from hub.views import user
 
 urlpatterns = [
     url(r'^$', user.index, name="index"),

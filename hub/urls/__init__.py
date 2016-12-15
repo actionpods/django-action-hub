@@ -1,9 +1,9 @@
 from django.conf.urls import url, include
 
-from .views import profile as views_profile
-from .views import action as views_action
+from hub.views import profile as views_profile
+from hub.views import action as views_action
 
-from .links import action, campaign, coalition, pod, users
+from hub.urls import action, campaign, coalition, pod, users
 
 
 urlpatterns = [
