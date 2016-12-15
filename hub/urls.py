@@ -1,16 +1,18 @@
 from django.conf.urls import url, include
 
-from .views import profile, action
+from .views import profile as views_profile
+from .views import action as views_action
+from .links import action, campaign, coalition, pod, users
 
 urlpatterns = [
-            url(r'^$', profile.index, name="dashboard"),
-            url(r'^action/', include('actionpods.links.action', namespace='action')),
-            url(r'^campaign/', include('actionpods.links.campaign', namespace='campaign')),
-            url(r'^coalition/', include('actionpods.links.coalition', namespace='coalition')),
-            url(r'^pod/', include('actionpods.links.pod', namespace='pod')),
-            url(r'^users/', include('actionpods.links.users', namespace='user')),
+            url(r'^$', views_profile.index, name="dashboard"),
+            url(r'^action/', include(action, namespace='action')),
+            url(r'^campaign/', include(campaign, namespace='campaign')),
+            url(r'^coalition/', include(coalition, namespace='coalition')),
+            url(r'^pod/', include(pod, namespace='pod')),
+            url(r'^users/', include(users, namespace='user')),
 
-            url(r'^pod/(?P<pk>[0-9]+)/action/create/$', action.Create.as_view(), name="action_create"),
+            url(r'^pod/(?P<pk>[0-9]+)/action/create/$', views_action.Create.as_view(), name="action_create"),
 
 
             ]
