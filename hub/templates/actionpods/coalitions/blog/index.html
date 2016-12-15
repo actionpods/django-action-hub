@@ -1,0 +1,53 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load add_class %}
+{% block title %}Template Blog{% endblock %}
+{% block head %}
+	{{ block.super }}
+	<link href="{% static 'blog/css/blog.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% if posts|length > 1 %}
+<div class="container">
+	<div class="blog-header">
+		<h1 class="blog-title text-center">The Code Coop Blog</h1>
+		<p class="lead blog-description text-center">Where we gather, plan, and scheme</p>
+  	</div>
+</div>
+{% endif %}
+<div class="row">
+	<div class="container">
+		<div class="blog-main col-md-offset-1 col-md-8 col-lg-10">
+			{% if posts %}
+			{%for post in posts %}
+				<div class="blog-post">
+					<a href = "/blog/view/{{ post.slug }}">
+						<h2 class="blog-post-title">{{ post.title }}</h2>
+					</a>
+					<p class="blog-post-meta"> {{ post.posted }} by <a href="/profile/neurobomber">{{ post.author.username|title }}</a></p>
+					<p class="blog-post-meta"> <a href = "/blog/category/{{ post.category }}">{{ post.category }}</a></p>
+					<div class ="blog-content">
+						<!-- /.blog-post -->
+						{{ post.body }}
+					</div>
+				</div>
+			{% endfor %}
+			{% else %}
+			<h2 class="blog-post-title">There are no blog posts</h2>
+			{% endif %}
+		  	<nav>
+				<ul class="pager">
+		  			<li><a href="#">Previous</a></li>
+		  			<li><a href="#">Next</a></li>
+				</ul>
+		  	</nav>
+		</div><!-- /.container -->
+	</div><!-- /.blog-main -->
+</div><!-- /.row -->
+{% endblock %}
+
+{% block js %}
+	{{ block.super }}
+    <script type="text/javascript" src="{% static 'blog/js/comments.js' %}"></script>
+{% endblock %}

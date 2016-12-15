@@ -1,7 +1,9 @@
 from django.contrib import admin
-from .models.pod import Pod, PodCategory, Action, Role
-from .models.coalition import Coalition, CoalitionBlog
-from .models.campaign import Campaign
+from hub.models.pod import Pod, PodCategory, Action, Role
+from hub.models.coalition import Coalition, CoalitionBlog
+from hub.models.campaign import Campaign
+from hub.models.relationships import Invitation, Blocking
+
 from django import forms
 from ckeditor.widgets import CKEditorWidget
 
@@ -94,7 +96,6 @@ admin.site.register(Coalition, CoalitionAdmin)
 admin.site.register(CoalitionBlog)
 admin.site.register(Campaign, CampaignAdmin)
 
-from .relationships.models import Invitation, Blocking
 
 
 class RelationshipAdmin(admin.ModelAdmin):
