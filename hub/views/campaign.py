@@ -23,7 +23,10 @@ class Index(ListView):
     context_object_name = 'campaigns'
 
     def get_queryset(self):
-        return Campaign.objects.filter(Q(admins=self.request.user) | Q(private=False)).order_by('-created')[:5]
+        if self.request.user.is_authenticated():
+            return Campaign.objects.filter(Q(admins=self.request.user) | Q(private=False)).order_by('-created')[:5]
+        else:
+            return Campaign.objects.filter(private=False).order_by('-created')[:5]
 
 @method_decorator(public_or_creator_permission_required(Campaign), name='dispatch')
 class Detail(DetailView):

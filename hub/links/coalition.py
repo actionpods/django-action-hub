@@ -2,6 +2,7 @@
 from django.conf.urls import url, include
 from ..views import coalition
 from ..relationships import views
+from ..links import invitations
 
 urlpatterns = [
     url(r'^$', coalition.Index.as_view(), name="index"),
@@ -11,5 +12,5 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/delete/$', coalition.Delete.as_view(), name="delete"),
     ##Invitations
     url(r'^(?P<pk>[0-9]+)/admin/$', views.list_received_invitations, name="admin"),
-    url(r'^(?P<pk>[0-9]+)/admin/invitation/', include('actionpods.links.invitations', namespace='invitations')),
+    url(r'^(?P<pk>[0-9]+)/admin/invitation/', include(invitations, namespace='invitations')),
 ]

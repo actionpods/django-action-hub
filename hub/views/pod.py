@@ -22,7 +22,10 @@ class Index(ListView):
     template_name = 'actionpods/pods/index.html'
     context_object_name = 'pods'
     def get_queryset(self):
-        return Pod.objects.filter(Q(leader=self.request.user) | Q(private=False)).order_by('-created')
+        if self.request.user.is_authenticated():
+            return Pod.objects.filter(Q(admins=self.request.user) | Q(private=False)).order_by('-created')[:5]
+        else:
+            return Pod.objects.filter(private=False).order_by('-created')[:5]
 
 @method_decorator(public_or_creator_permission_required(Pod), name='dispatch')
 class Detail(DetailView):

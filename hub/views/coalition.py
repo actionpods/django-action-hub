@@ -24,7 +24,11 @@ class Index(ListView):
     context_object_name = 'coalitions'
 
     def get_queryset(self):
-        return Coalition.objects.filter(Q(admins=self.request.user) | Q(private=False)).order_by('-created')[:5]
+        if self.request.user.is_authenticated():
+            return Coalition.objects.filter(Q(admins=self.request.user) | Q(private=False)).order_by('-created')[:5]
+        else:
+            return Coalition.objects.filter(private=False).order_by('-created')[:5]
+
 
 @method_decorator(public_or_admin_permission_required(Coalition), name='dispatch')
 class Detail(DetailView):
