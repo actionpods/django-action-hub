@@ -2,8 +2,8 @@
 from django.conf.urls import url, include
 from ..views import coalition
 from ..relationships import views
-from ..links import invitations
 
+from . import invitations
 urlpatterns = [
     url(r'^$', coalition.Index.as_view(), name="index"),
     url(r'^create/$', coalition.Create.as_view(), name="create"),

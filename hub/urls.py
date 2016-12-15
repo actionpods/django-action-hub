@@ -2,7 +2,9 @@ from django.conf.urls import url, include
 
 from .views import profile as views_profile
 from .views import action as views_action
-from .links import action, campaign, coalition, invitations, pod, users
+
+from .links import action, campaign, coalition, pod, users
+
 
 urlpatterns = [
             url(r'^$', views_profile.index, name="dashboard"),
