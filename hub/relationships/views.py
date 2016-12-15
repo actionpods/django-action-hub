@@ -1,5 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.urls import reverse
+
+from django.utils.translation import gettext as _
 
 from .models import Invitation, Blocking
 from ..models.pod import Pod
@@ -31,7 +34,7 @@ def respond_to_invitation(request, pk, pod_id, resp='a', redirect_to_view=None):
         invitation.decline()
         messages.success(request, _("Invitation declined."), fail_silently=True)
     if not redirect_to_view:
-        redirect_to_view = list_friends
+        redirect_to_view = reverse('actionpods:coalition:admin', args=(pk))
     return redirect(redirect_to_view)
 
 

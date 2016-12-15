@@ -39,6 +39,9 @@ class Create(BaseCreate):
 
     def form_valid(self, form):
         form.instance.leader = self.request.user
+        form.instance.creator = self.request.user
+        form.save()
+        form.instance.admins.add(self.request.user)
         form.instance.members.add(self.request.user)
         return super(Create, self).form_valid(form)
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
-from ..models.main import Pod
+from ..models.pod import Pod
 
 def index(request):
     return render(request, 'actionpods/personal/dashboard.html',
