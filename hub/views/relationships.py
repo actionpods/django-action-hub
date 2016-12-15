@@ -1,38 +1,42 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.urls import reverse
 
+from django.utils.translation import gettext as _
 
-from .models import Invitation, Blocking
-from ..models.pod import Pod
-from ..models.coalition import Coalition
+from hub.models.relationships import Invitation, Blocking
+from hub.models.pod import Pod
+from hub.models.coalition import Coalition
 
-def list_received_invitations(request, pk):
-    """
-    List invitations received by coalition.
-    """
-    coalition = get_object_or_404(Coalition, pk=pk)
-    invitations = Invitation.objects.filter(coalition=coalition)
-    return render(request, 'relationships/invitations_list.html',
-        {'invitations': invitations,
-         'status': 'received'})
+class RelationShipView():
+    def list_received_invitations(request, pk):
+        """
+        List invitations received by coalition.
+        """
+        coalition = get_object_or_404(Coalition, pk=pk)
+        invitations = Invitation.objects.filter(coalition=coalition)
+        return render(request, 'relationships/invitations_list.html',
+            {'invitations': invitations,
+             'status': 'received'})
 
-def respond_to_invitation(request, pk, pod_id, resp='a', redirect_to_view=None):
-    """
-    Accept or decline invitation.
-    """
-    coalition = get_object_or_404(Coalition, pk=pk)
-    invitation = get_object_or_404(Invitation,
-        coalition=coalition,
-        pod=pod_id
-    )
-    if resp == 'a':
-        invitation.accept()
-        #messages.success(request, _("Invitation accepted."), fail_silently=True)
-    elif resp == 'd':
-        invitation.decline()
-        #messages.success(request, _("Invitation declined."), fail_silently=True)
-    if not redirect_to_view:
-        redirect_to_view = list_friends
-    return redirect(redirect_to_view)
+    def respond_to_invitation(request, pk, pod_id, resp='a', redirect_to_view=None):
+        """
+        Accept or decline invitation.
+        """
+        coalition = get_object_or_404(Coalition, pk=pk)
+        invitation = get_object_or_404(Invitation,
+            coalition=coalition,
+            pod=pod_id
+        )
+        if resp == 'a':
+            invitation.accept()
+            messages.success(request, _("Invitation accepted."), fail_silently=True)
+        elif resp == 'd':
+            invitation.decline()
+            messages.success(request, _("Invitation declined."), fail_silently=True)
+        if not redirect_to_view:
+            redirect_to_view = reverse('actionpods:coalition:admin', args=(pk))
+        return redirect(redirect_to_view)
 
 
 '''

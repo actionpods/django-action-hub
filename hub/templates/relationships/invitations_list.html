@@ -5,6 +5,19 @@
 {% block content %}
 <div class="container">
 <h2> Requests to Join </h2>
+{% if messages %}
+<div class="col-sm-3">
+{% for message in messages %}
+<div class="alert alert-success fade in {{ message.tags }}">
+
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+  <p>{{ message }}</p>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+
 <table class="table table-hover">
     <thead>
         <tr>

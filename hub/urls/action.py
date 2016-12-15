@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 
-from ..views import action
+from hub.views import action
 
 urlpatterns = [
     url(r'^action/(?P<slug>[-\w]+)/delete/$', action.Delete.as_view(), name="delete"),

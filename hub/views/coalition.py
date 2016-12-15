@@ -55,3 +55,26 @@ class Delete(DeleteView):
     model = Coalition
     template_name = 'actionpods/generic/delete.html'
     success_url = reverse_lazy('actionpods:coalition')
+
+
+####
+####
+##blog
+
+from hub.models.coalition import CoalitionBlog
+
+def blog_index(request, pk):
+    return render(request, 'actionpods/coalitions/blog/index.html',
+        {
+        'posts': CoalitionBlog.objects.filter(coalition_id=pk).order_by('-posted', 'title')[:5],
+        }
+    )
+
+#Returns the (hopefully) singular post for that blog
+def view_post(request, slug):
+    return render(request, 'blog/index.html',
+        {
+        'posts': Blog.objects.filter(slug=slug).order_by('-posted', 'title')[:5],
+        'slug': slug,
+        }
+    )

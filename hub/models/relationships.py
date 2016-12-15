@@ -3,9 +3,28 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import pre_delete, post_save
 from django.contrib.auth.models import User
 
-from ..models.pod import Pod
-from ..models.coalition import Coalition
-from .managers import InvitationManager, BlockingManager
+from hub.models.pod import Pod
+from hub.models.coalition import Coalition
+from django.db.models import Q
+
+class InvitationManager(models.Manager):
+
+    def remove(self, coalition, pod):
+        invitations = self.filter(coalition=coalition, pod=pod)
+        if not invitations:
+            invitations = self.filter(coalition=pod, pod=coalition)
+        if invitations:
+            invitations.delete()
+
+
+class BlockingManager(models.Manager):
+
+    def blocked_for_coalition(self, coalition):
+        blocked = []
+        qs = self.filter(coalition=coalition).select_related(depth=1)
+        for blocking in qs:
+            blocked.append(blocking.pod)
+        return blocked
 
 class Blocking(models.Model):
     """

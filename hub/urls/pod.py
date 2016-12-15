@@ -1,6 +1,5 @@
 from django.conf.urls import url, include
-from ..views import pod
-from ..relationships import views
+from hub.views import pod
 
 urlpatterns = [
     url(r'^$', pod.Index.as_view(), name="index"),

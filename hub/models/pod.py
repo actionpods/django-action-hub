@@ -36,11 +36,6 @@ class Pod(BaseModel):
     def get_absolute_url(self):
         return reverse("actionpods:pod:detail", kwargs={'pk': self.id})
 
-    def save(self, *args, **kwargs):
-        if (self.members.count() > self.team_size):
-            self.team_size = self.members.count()
-        super(Pod, self).save(*args, **kwargs)
-
 #A clearly defined action (e.g. protests, robocalls, door knocking)
 class Action(models.Model):
     title = models.CharField(max_length=100, unique=True)

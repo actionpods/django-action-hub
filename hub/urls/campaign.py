@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from ..views import campaign
+from hub.views import campaign
 
 urlpatterns = [
 url(r'^$', campaign.Index.as_view(), name="index"),
