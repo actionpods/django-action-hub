@@ -1,0 +1,37 @@
+{% extends "base/base.html" %}
+{% load thumbnail %}
+{% block title %}{{ campaign.title }} - Campaign{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <div class="container text-center">
+    <h1>{{ campaign.title }}</h1>
+    <p>{{ campaign.description }}</p>
+  </div>
+</div>
+
+<div class="container-fluid bg-3 text-center">
+  <h3>Our Coalitions</h3><br>
+  <div class="row">
+	{% for coalition in campaign.coalitions.all %}
+	<a href = "{% url 'actionpods:coalition:detail' coalition.id %}">
+		<div class="col-sm-3">
+	      <p>{{ coalition.title }}</p>
+          {% thumbnail coalition.banner "150x80" crop="center" as im %}
+          <img class="img-responsive" src="{{ im.url }}" style="width:100%" alt="{{ coalition.title }}">
+          {% endthumbnail %}
+	    </div>
+	</a>
+    {% if forloop.counter|divisibleby:4 %}
+    </div>
+</div>
+<br>
+<div class="container-fluid bg-3 text-center">
+    <div class="row">
+    {% endif %}
+	{% endfor %}
+    </div>
+</div>
+<br><br>
+
+{% endblock %}

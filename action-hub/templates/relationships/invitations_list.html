@@ -1,0 +1,38 @@
+{% extends "base/base.html" %}
+
+{% block title %}ActionPods Prototype{% endblock %}
+
+{% block content %}
+<div class="container">
+<h2> Requests to Join </h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Pod</th>
+            <th>Leader</th>
+            <th>Team Size</th>
+            <th>Response</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for invitation in invitations %}
+        <tr>
+            <th scope="row">{{ invitation.id }}</th>
+            <td><a href = "{% url 'actionpods:pod:detail' invitation.pod.id %}">{{ invitation.pod.title }}</a></td>
+            <td>{{ invitation.pod.leader }}</td>
+            <td>{{ invitation.pod.team_size }}</td>
+            <td>
+                <a href="{% url 'actionpods:coalition:invitations:accept_request' invitation.coalition.id invitation.pod.id %}">
+                    <button class="btn btn-success">Accept </button>
+                </a>
+                <a href="{% url 'actionpods:coalition:invitations:decline_request' invitation.coalition.id invitation.pod.id %}">
+                    <button class="btn btn-danger">Decline</button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

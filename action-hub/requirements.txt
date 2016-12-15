@@ -1,0 +1,8 @@
+django
+django-ckeditor
+
+git+git://github.com/mariocesar/sorl-thumbnail.git
+#Django Rest Framework
+djangorestframework
+django-tagging
+django-filter

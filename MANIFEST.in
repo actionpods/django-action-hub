@@ -1,0 +1,7 @@
+include LICENSE
+include README.rst
+recursive-include action-hub/templates *
+recursive-include action-hub/templatetags *
+recursive-include action-hub/relationships *
+recursive-include action-hub/models *
+recursive-include action-hub/views *

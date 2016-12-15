@@ -1,0 +1,124 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% block title %}{{ coalition.title }} - Coalition {% endblock %}
+
+{% block content %}
+<!-- Page Content -->
+    <div class="container">
+
+        <!-- Heading Row -->
+        <div class="row">
+            <div class="col-md-8">
+            {% thumbnail coalition.banner "900x350" crop="center" as im %}
+            <img class="img-responsive img-rounded" src="{{ im.url }}" alt="HerpDerp">
+            {% endthumbnail %}
+            </div>
+            <!-- /.col-md-8 -->
+            <div class="col-md-4">
+                <h1>{{ coalition.title }}</h1>
+                <p>{{ coalition.description }}</p>
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#campaignListing">
+                    Join Our Campaigns
+                </button>
+            </div>
+            <!-- /.col-md-4 -->
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+        <!-- Call to Action Well -->
+        <div class="row">
+            <div class="col-lg-12">
+				<button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#podListing">
+  					<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+					{{ coalition.pods.all|length }} Active Pods
+				</button>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+        <!-- Content Row -->
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Heading 1</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.</p>
+                <a class="btn btn-default" href="#">More Info</a>
+            </div>
+            <!-- /.col-md-4 -->
+            <div class="col-md-4">
+                <h2>Heading 2</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.</p>
+                <a class="btn btn-default" href="#">More Info</a>
+            </div>
+            <!-- /.col-md-4 -->
+            <div class="col-md-4">
+                <h2>Heading 3</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.</p>
+                <a class="btn btn-default" href="#">More Info</a>
+            </div>
+            <!-- /.col-md-4 -->
+        </div>
+<!-- /.row -->
+{% endblock %}
+
+{% block modal %}
+<!-- List Pods -->
+<div class="modal fade" id="podListing" tabindex="-1" role="dialog" aria-labelledby="podListing">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="podListingLabel">Active Pods</h4>
+      </div>
+      <div class="modal-body">
+          {% for pod in coalition.pods.all %}
+          <div class="media">
+              <div class="media-body">
+                  <a href = "{% url 'actionpods:pod:detail' pod.id %}">
+                      <h4 class="media-heading">{{ pod.title }}</h4>
+                  </a>
+                  {{ pod.description|safe }}
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- List Campaigns -->
+<div class="modal fade" id="campaignListing" tabindex="-1" role="dialog" aria-labelledby="campaignListing">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="campaignListingLabel">Campaigns</h4>
+      </div>
+      <div class="modal-body">
+          {% for campaign in coalition.campaign_coalitions.all %}
+          <div class="media">
+              <div class="media-body">
+                  <a href = "{% url 'actionpods:campaign:detail' campaign.id %}">
+                      <h4 class="media-heading">{{ campaign.title }}</h4>
+                  </a>
+                  {{ campaign.description|safe }}
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

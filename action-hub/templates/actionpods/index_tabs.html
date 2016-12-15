@@ -1,0 +1,12 @@
+{% load actionpods_tags %}
+
+
+<div class="container">
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="{% active 'actionpods:pod:index' %}" ><a href="{% url 'actionpods:pod:index' %}">Pods</a></li>
+      <li role="presentation" class="{% active 'actionpods:coalition:index' %}"><a href="{% url 'actionpods:coalition:index' %}">Coalitions</a></li>
+      <li role="presentation" class="{% active 'actionpods:campaign:index' %}"><a href="{% url 'actionpods:campaign:index' %}">Campaigns</a></li>
+      <li> <input type="text" class="form-control" placeholder="Search"></li>
+    </ul>
+
+</div>

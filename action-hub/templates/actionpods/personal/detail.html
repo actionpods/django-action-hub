@@ -1,0 +1,29 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load add_class %}
+{% block head %}
+	{{ block.super }}
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+    {% include 'base/sidebar.html' %}
+    <div class="col-sm-9">
+      <h2>{{ user.username }}</h2>
+      <br><br>
+	  Pods:
+	  <ul class="list-unstyled">
+		{% for pod in user.pod_members.all %}
+		<li><a href ="{% url 'actionpods:detail' pod.pk %}">{{ pod.title }}</a></li>
+		{% endfor %}
+	  </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+	{{ block.super }}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+{% block title %}Edit {{ object.title }}{% endblock %}
+
+
+{% block content %}
+<!DOCTYPE html>
+{% include 'base/sidebar.html' %}
+    <div class="col-sm-9">
+        <h2> Edit {{ object.title }} </h2>
+        <form action="" method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Update" />
+        </form>
+    </div>
+</div>
+
+{% endblock %}

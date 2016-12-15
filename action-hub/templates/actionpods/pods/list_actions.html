@@ -1,0 +1,6 @@
+<h4> Actions </4>
+<ul>
+{% for action in object.action_set.all %}
+    <li><a href ="{% url 'actionpods:action:detail' action.slug %}">{{ action.title }}</a></li>
+{% endfor %}
+</ul>

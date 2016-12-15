@@ -1,0 +1,81 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-3 sidenav hidden-xs">
+      <h2>Dashboard</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="{% url 'actionpods:pod:index' %}">Pods</a></li>
+        <li><a href="{% url 'actionpods:coalition:index' %}">Coalitions</a></li>
+        <li><a href="{% url 'actionpods:campaign:index' %}">Campaigns</a></li>
+        <li><a href="{% url 'actionpods:user:index' %}">Friends</a></li>
+      </ul><br>
+    </div>
+    <br>
+
+    <div class="col-sm-9">
+      <div class="well">
+        <h4>Dashboard</h4>
+        <p>Some text..</p>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>Users</h4>
+            <p>1 Million</p>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>Pages</h4>
+            <p>100 Million</p>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>Sessions</h4>
+            <p>10 Million</p>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>Bounce</h4>
+            <p>30%</p>
+          </div>
+        </div>
+      </div>
+      {% for pod in pods %}
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="well">
+            <p><a href="{% url 'actionpods:pod:detail' pod.pk %}">{{ pod.title }}</a></p>
+            <p>Team Size: {{ pod.team_size }}</p>
+            <p>{{ pod.description|slice:":255"|safe }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="well">
+            <p>Text</p>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="well">
+            <p>Text</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+	{{ block.super }}
+{% endblock %}
