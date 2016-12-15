@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-
+from django.contrib import messages
 
 from .models import Invitation, Blocking
 from ..models.pod import Pod
@@ -26,10 +26,10 @@ def respond_to_invitation(request, pk, pod_id, resp='a', redirect_to_view=None):
     )
     if resp == 'a':
         invitation.accept()
-        #messages.success(request, _("Invitation accepted."), fail_silently=True)
+        messages.success(request, _("Invitation accepted."), fail_silently=True)
     elif resp == 'd':
         invitation.decline()
-        #messages.success(request, _("Invitation declined."), fail_silently=True)
+        messages.success(request, _("Invitation declined."), fail_silently=True)
     if not redirect_to_view:
         redirect_to_view = list_friends
     return redirect(redirect_to_view)
