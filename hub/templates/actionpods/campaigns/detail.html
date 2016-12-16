@@ -13,13 +13,11 @@
 <div class="container-fluid bg-3 text-center">
   <h3>Our Coalitions</h3><br>
   <div class="row">
-	{% for coalition in campaign.coalitions.all %}
-	<a href = "{% url 'actionpods:coalition:detail' coalition.id %}">
+	{% for pod in campaign.pods.all %}
+	<a href = "{% url 'actionpods:pod:detail' pod.id %}">
 		<div class="col-sm-3">
-	      <p>{{ coalition.title }}</p>
-          {% thumbnail coalition.banner "150x80" crop="center" as im %}
-          <img class="img-responsive" src="{{ im.url }}" style="width:100%" alt="{{ coalition.title }}">
-          {% endthumbnail %}
+	      <p>{{ pod.title }}</p>
+
 	    </div>
 	</a>
     {% if forloop.counter|divisibleby:4 %}

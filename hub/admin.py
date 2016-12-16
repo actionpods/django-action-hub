@@ -1,17 +1,15 @@
 from django.contrib import admin
 from hub.models.pod import Pod, PodCategory, Action, Role
-from hub.models.coalition import Coalition, CoalitionBlog
-from hub.models.campaign import Campaign
+from hub.models.campaign import Campaign, CampaignBlog
 from hub.models.relationships import Invitation, Blocking
 
 from django import forms
-from ckeditor.widgets import CKEditorWidget
-
+from tinymce.widgets import TinyMCE
 
 ### Pods Admin Models ###
 
 class PodAdminForm(forms.ModelForm):
-    description = forms.CharField(widget=CKEditorWidget())
+    description = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
     class Meta:
         model = Pod
         fields = '__all__'
@@ -39,7 +37,7 @@ class RoleInline(admin.StackedInline):
     model = Role
 
 class ActionAdminForm(forms.ModelForm):
-    description = forms.CharField(widget=CKEditorWidget())
+    description = forms.CharField()
     class Meta:
         model = Action
         fields = '__all__'
@@ -49,24 +47,6 @@ class ActionAdmin(admin.ModelAdmin):
     form = ActionAdminForm
     inlines = [RoleInline,]
     prepopulated_fields = {'slug': ('title',), }
-    def save_model(self, request, obj, form, change):
-        if getattr(obj, 'creator', None) is None:
-            obj.creator = request.user
-        obj.save()
-
-class CoalitionAdminForm(forms.ModelForm):
-    #description = forms.CharField(widget=CKEditorWidget())
-    class Meta:
-        model = Coalition
-        fields = '__all__'
-
-class CoalitionAdmin(admin.ModelAdmin):
-    exclude = ['creator', 'created']
-    form = CoalitionAdminForm
-    list_display = ["id", "title", "creator", "created", "private"]
-    prepopulated_fields = {
-                           'slug': ('title',),
-                           }
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'creator', None) is None:
             obj.creator = request.user
@@ -92,22 +72,18 @@ class CampaignAdmin(admin.ModelAdmin):
 
 admin.site.register(Role)
 admin.site.register(Action, ActionAdmin)
-admin.site.register(Coalition, CoalitionAdmin)
-admin.site.register(CoalitionBlog)
 admin.site.register(Campaign, CampaignAdmin)
 
-
-
 class RelationshipAdmin(admin.ModelAdmin):
-    list_display = ["id", "coalition", "pod", "added"]
+    list_display = ["id", "campaign", "pod", "added"]
 
 
 class InvitationAdmin(admin.ModelAdmin):
-    list_display = ["id", "coalition", "pod", "sent"]
+    list_display = ["id", "campaign", "pod", "sent"]
 
 
 class BlockingAdmin(admin.ModelAdmin):
-    list_display = ["id", "coalition", "pod", "added"]
+    list_display = ["id", "campaign", "pod", "added"]
 
 admin.site.register(Invitation, InvitationAdmin)
 admin.site.register(Blocking, BlockingAdmin)

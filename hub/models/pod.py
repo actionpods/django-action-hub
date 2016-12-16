@@ -5,8 +5,7 @@ from django.urls import reverse
 
 from django.template.defaultfilters import slugify
 
-#CKEditor
-from ckeditor.fields import RichTextField
+from tinymce.models import HTMLField
 
 from .base import BaseModel
 
@@ -27,7 +26,7 @@ class Pod(BaseModel):
     team_size = models.IntegerField(default = 1)
     members = models.ManyToManyField(User, blank=True, related_name='pod_members')
     leader = models.ForeignKey(User)
-    description = RichTextField(null=True, blank=True)
+    description = HTMLField(null=True, blank=True)
     categories = models.ManyToManyField(PodCategory, blank=True)
 
     def __str__(self):
@@ -42,7 +41,7 @@ class Action(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
 
     pod = models.ForeignKey(Pod, blank=True)
-    description = RichTextField(null=True, blank=True)
+    description = HTMLField(null=True, blank=True)
     #If applicable, set event time
     start_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)

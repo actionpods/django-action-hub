@@ -49,3 +49,24 @@ class Delete(DeleteView):
     template_name = 'actionpods/generic/delete.html'
     fields = ['title',]
     success_url = reverse_lazy('actionpods:campaign')
+
+
+##blog
+
+from hub.models.campaign import CampaignBlog
+
+def blog_index(request, pk):
+    return render(request, 'actionpods/campaign/blog/index.html',
+        {
+        'posts': CampaignBlog.objects.filter(campaign_id=pk).order_by('-posted', 'title')[:5],
+        }
+    )
+
+#Returns the (hopefully) singular post for that blog
+def view_post(request, slug):
+    return render(request, 'blog/index.html',
+        {
+        'posts': Blog.objects.filter(slug=slug).order_by('-posted', 'title')[:5],
+        'slug': slug,
+        }
+    )

@@ -43,10 +43,10 @@
                      {{ object.leader.username }}
                 </button>
             </a>
-            <h4>Coalitions</h4>
+            <h4>Campaigns</h4>
             <div class="list-group">
-                {% for coalition in object.coalition_pods.all %}
-                <a href ="{% url 'actionpods:coalition:detail' coalition.pk %}" class="list-group-item">{{ coalition.title }}</a>
+                {% for campaign in object.campaign_pods.all %}
+                <a href ="{% url 'actionpods:campaign:detail' campaign.pk %}" class="list-group-item">{{ campaign.title }}</a>
                 {% endfor %}
             </div>
             <hr>

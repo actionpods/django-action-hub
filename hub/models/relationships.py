@@ -4,34 +4,34 @@ from django.db.models.signals import pre_delete, post_save
 from django.contrib.auth.models import User
 
 from hub.models.pod import Pod
-from hub.models.coalition import Coalition
+from hub.models.campaign import Campaign
 from django.db.models import Q
 
 class InvitationManager(models.Manager):
 
-    def remove(self, coalition, pod):
-        invitations = self.filter(coalition=coalition, pod=pod)
+    def remove(self, campaign, pod):
+        invitations = self.filter(campaign=campaign, pod=pod)
         if not invitations:
-            invitations = self.filter(coalition=pod, pod=coalition)
+            invitations = self.filter(campaign=pod, pod=campaign)
         if invitations:
             invitations.delete()
 
 
 class BlockingManager(models.Manager):
 
-    def blocked_for_coalition(self, coalition):
+    def blocked_for_campaign(self, campaign):
         blocked = []
-        qs = self.filter(coalition=coalition).select_related(depth=1)
+        qs = self.filter(campaign=campaign).select_related(depth=1)
         for blocking in qs:
             blocked.append(blocking.pod)
         return blocked
 
 class Blocking(models.Model):
     """
-    A coalition can block a pod from requesting to join
+    A campaign can block a pod from requesting to join
     """
 
-    coalition = models.ForeignKey(Coalition, verbose_name=_("coalition that is blocking"), related_name="blocking")
+    campaign = models.ForeignKey(Campaign, verbose_name=_("campaign that is blocking"), related_name="blocking")
     pod = models.ForeignKey(Pod, verbose_name=_("pod that is blocked"), related_name="blocked_by")
     added = models.DateTimeField(_("added"), auto_now=True)
 
@@ -40,10 +40,10 @@ class Blocking(models.Model):
 
 class Invitation(models.Model):
     """
-    A pod will send a request to join the Coalition
+    A pod will send a request to join the Campaign
     """
 
-    coalition = models.ForeignKey(Coalition, verbose_name=_("request to join coalition"), related_name="invitations_to")
+    campaign = models.ForeignKey(Campaign, verbose_name=_("request to join campaign"), related_name="invitations_to")
     pod = models.ForeignKey(Pod, verbose_name=_("from pod"), related_name="invitations_from")
     message = models.TextField(_("message"))
     sent = models.DateTimeField(_("sent"), auto_now=True)
@@ -51,8 +51,8 @@ class Invitation(models.Model):
     objects = InvitationManager()
 
     def accept(self):
-        if not self.pod in self.coalition.pods.all():
-            self.coalition.pods.add(self.pod)
+        if not self.pod in self.campaign.pods.all():
+            self.campaign.pods.add(self.pod)
         self.delete()
 
     def decline(self):

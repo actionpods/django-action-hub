@@ -2,8 +2,8 @@ from rest_framework import viewsets
 
 from django.contrib.auth.models import User
 from .models.pod import Pod, Action
-from .models.coalition import Coalition
-from .serializers import PodSerializer, CoalitionSerializer, ActionSerializer
+from .models.campaign import Campaign
+from .serializers import PodSerializer, CampaignSerializer, ActionSerializer
 
 from rest_framework import filters, permissions
 
@@ -17,9 +17,9 @@ class ActionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
 
-class CoalitionViewSet(viewsets.ModelViewSet):
-    queryset = Coalition.objects.all()
-    serializer_class = CoalitionSerializer
+class CampaignViewSet(viewsets.ModelViewSet):
+    queryset = Campaign.objects.all()
+    serializer_class = CampaignSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
     #search_fields = ('user__username','^user__email','address', 'city')

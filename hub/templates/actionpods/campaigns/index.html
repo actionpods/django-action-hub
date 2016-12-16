@@ -20,7 +20,7 @@
 				<tr>
 					<th>#</th>
 					<th>Title</th>
-					<th>Coalitions</th>
+					<th>Pods</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -28,7 +28,7 @@
 				<tr>
 					<th scope="row">{{ campaign.id }}</th>
 					<td><a href = "{% url 'actionpods:campaign:detail' campaign.id %}">{{ campaign.title }}</a></td>
-					<td>{{ campaign.coalitions.all|length }}</td>
+					<td>{{ campaign.pods.all|length }}</td>
 				</tr>
 				{% endfor %}
 			</tbody>

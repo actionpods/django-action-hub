@@ -1,13 +1,16 @@
 {% extends "base/base.html" %}
 {% block title %}Create Object{% endblock %}
-
+{% load staticfiles %}
 {% block content %}
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
 <div class = "container">
     <div class="col-sm-9">
         <h2> Create Object </h2>
         <form action="" method="post">{% csrf_token %}
+            {{ form.media }}
             {{ form.as_p }}
-            <input type="submit" value="Update" />
+            <input type="submit" value="Create" />
         </form>
     </div>
 </div>

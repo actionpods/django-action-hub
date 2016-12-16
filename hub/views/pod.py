@@ -1,14 +1,13 @@
 from django.shortcuts import render, get_object_or_404
-
+from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect, HttpResponse
+#Models
 from ..models.pod import Pod
 
+#Generic Views
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .base import BaseCreate
-
-
-from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect, HttpResponse
 
 #Permissions
 from .decorators.permissions import is_creator_permission_required, public_or_creator_permission_required

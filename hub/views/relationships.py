@@ -6,15 +6,15 @@ from django.utils.translation import gettext as _
 
 from hub.models.relationships import Invitation, Blocking
 from hub.models.pod import Pod
-from hub.models.coalition import Coalition
+from hub.models.campaign import Campaign
 
 class RelationShipView():
     def list_received_invitations(request, pk):
         """
-        List invitations received by coalition.
+        List invitations received by campaign.
         """
-        coalition = get_object_or_404(Coalition, pk=pk)
-        invitations = Invitation.objects.filter(coalition=coalition)
+        campaign = get_object_or_404(Campaign, pk=pk)
+        invitations = Invitation.objects.filter(campaign=campaign)
         return render(request, 'relationships/invitations_list.html',
             {'invitations': invitations,
              'status': 'received'})
@@ -23,9 +23,9 @@ class RelationShipView():
         """
         Accept or decline invitation.
         """
-        coalition = get_object_or_404(Coalition, pk=pk)
+        campaign = get_object_or_404(Campaign, pk=pk)
         invitation = get_object_or_404(Invitation,
-            coalition=coalition,
+            campaign=campaign,
             pod=pod_id
         )
         if resp == 'a':
@@ -35,7 +35,7 @@ class RelationShipView():
             invitation.decline()
             messages.success(request, _("Invitation declined."), fail_silently=True)
         if not redirect_to_view:
-            redirect_to_view = reverse('actionpods:coalition:admin', args=(pk))
+            redirect_to_view = reverse('actionpods:campaign:admin', args=(pk))
         return redirect(redirect_to_view)
 
 

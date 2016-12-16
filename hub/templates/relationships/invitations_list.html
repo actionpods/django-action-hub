@@ -36,10 +36,10 @@
             <td>{{ invitation.pod.leader }}</td>
             <td>{{ invitation.pod.team_size }}</td>
             <td>
-                <a href="{% url 'actionpods:coalition:invitations:accept_request' invitation.coalition.id invitation.pod.id %}">
+                <a href="{% url 'actionpods:campaign:invitations:accept_request' invitation.campaign.id invitation.pod.id %}">
                     <button class="btn btn-success">Accept </button>
                 </a>
-                <a href="{% url 'actionpods:coalition:invitations:decline_request' invitation.coalition.id invitation.pod.id %}">
+                <a href="{% url 'actionpods:campaign:invitations:decline_request' invitation.campaign.id invitation.pod.id %}">
                     <button class="btn btn-danger">Decline</button>
                 </a>
             </td>

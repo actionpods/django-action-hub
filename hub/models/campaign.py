@@ -5,12 +5,12 @@ from django.urls import reverse
 from django.template.defaultfilters import slugify
 
 from .base import BaseModel
-from .coalition import Coalition
+from .pod import Pod
 
 class Campaign(BaseModel):
     title = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=100, db_index=True)
-    coalitions = models.ManyToManyField(Coalition, related_name='campaign_coalitions', blank=True)
+    pods = models.ManyToManyField(Pod, related_name='campaign_pods', blank=True)
     def __str__(self):
         return '%s' % self.title
 
@@ -20,3 +20,10 @@ class Campaign(BaseModel):
 
     def get_absolute_url(self):
         return reverse("actionpods:campaign:detail", kwargs={'pk': self.id})
+
+try:
+    from blog.models import *
+    class CampaignBlog(Blog):
+        coalition = models.ForeignKey(Campaign)
+except ImportError:
+    pass

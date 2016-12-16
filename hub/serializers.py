@@ -2,7 +2,6 @@ from django.forms import widgets
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models.pod import Pod, Action
-from .models.coalition import Coalition
 from .models.campaign import Campaign
 
 class PodSerializer(serializers.HyperlinkedModelSerializer):
@@ -15,7 +14,7 @@ class ActionSerializer(serializers.HyperlinkedModelSerializer):
         model = Action
         fields = ('title',)
 
-class CoalitionSerializer(serializers.HyperlinkedModelSerializer):
+class CampaignSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Coalition
+        model = Campaign
         fields = ('title', 'pods')
