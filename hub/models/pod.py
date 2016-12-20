@@ -7,27 +7,18 @@ from django.template.defaultfilters import slugify
 
 from tinymce.models import HTMLField
 
-from .base import BaseModel
-
-class PodCategory(models.Model):
-    title = models.CharField(max_length=100, db_index=True)
-    slug = models.SlugField(max_length=100, db_index=True)
-
-    def __str__(self):
-        return '%s' % self.title
-
-    @permalink
-    def get_absolute_url(self):
-        return ('view_pod_category', None, { 'slug': self.slug })
-
+from .base import BaseModel, Focus
 #A collection of people with a common set of goals
 class Pod(BaseModel):
-    title = models.CharField(max_length=100, unique=True)
     team_size = models.IntegerField(default = 1)
     members = models.ManyToManyField(User, blank=True, related_name='pod_members')
-    leader = models.ForeignKey(User)
     description = HTMLField(null=True, blank=True)
-    categories = models.ManyToManyField(PodCategory, blank=True)
+    focus = models.ForeignKey(Focus, blank=True)
+    ally_pods = models.ManyToManyField('self', blank=True)
+
+    def _get_title(self):
+        return '%s\'s %s' % (self.creator.username, self.focus.title)
+    title = property(_get_title)
 
     def __str__(self):
         return '%s' % self.title
@@ -35,7 +26,7 @@ class Pod(BaseModel):
     def get_absolute_url(self):
         return reverse("actionpods:pod:detail", kwargs={'pk': self.id})
 
-#A clearly defined action (e.g. protests, robocalls, door knocking)
+#A clearly defined action (e.g. protests, voter calls, door knocking)
 class Action(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -56,11 +47,3 @@ class Action(models.Model):
     def get_absolute_url(self):
         #return reverse("actionpods:action", kwargs={'pk': self.pod.id, 'slug': self.slug})
         return reverse("actionpods:action:detail", kwargs={'slug': self.slug})
-
-#Defined roles for each action
-class Role(models.Model):
-    title = models.CharField(max_length=100, db_index=True)
-    member = models.ForeignKey(User, blank=True, related_name='role_member')
-    action = models.ForeignKey(Action)
-    def __str__(self):
-        return '%s' % self.title

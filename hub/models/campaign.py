@@ -4,12 +4,13 @@ from django.urls import reverse
 
 from django.template.defaultfilters import slugify
 
-from .base import BaseModel
+from .base import BaseModel, Focus
 from .pod import Pod
 
 class Campaign(BaseModel):
     title = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=100, db_index=True)
+    focus = models.ForeignKey(Focus, blank=True)
     pods = models.ManyToManyField(Pod, related_name='campaign_pods', blank=True)
     def __str__(self):
         return '%s' % self.title
@@ -24,6 +25,6 @@ class Campaign(BaseModel):
 try:
     from blog.models import *
     class CampaignBlog(Blog):
-        coalition = models.ForeignKey(Campaign)
+        campaign = models.ForeignKey(Campaign)
 except ImportError:
     pass

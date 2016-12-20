@@ -1,5 +1,5 @@
 {% extends "base/base.html" %}
-{% block title %}{{ object.title }} - Pod{% endblock %}
+{% block title %}{{ object.creator.username|title }}'s {{ object.focus.title }} Pod{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -9,7 +9,7 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-9">
-                            <div><h1 class="panel-title">{{ object.title }} Pod</h1></div>
+                            <div><h1 class="panel-title">{{ object.creator.username|title }}'s {{ object.focus.title }} Pod</h1></div>
                         </div>
                         <div class="col-xs-3 text-right">
                             <div class="huge">{{ object.team_size }} <span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
@@ -37,10 +37,10 @@
             </ul>
         </div>
         <div class="col-md-5">
-            <a href ="{% url 'actionpods:user:detail' object.leader.pk %}">
+            <a href ="{% url 'actionpods:user:detail' object.creator.pk %}">
                 <button type="button" class="btn btn-default btn-sm">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                     {{ object.leader.username }}
+                     {{ object.creator.username }}
                 </button>
             </a>
             <h4>Campaigns</h4>

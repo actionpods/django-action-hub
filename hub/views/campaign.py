@@ -35,13 +35,13 @@ class Detail(DetailView):
 
 class Create(BaseCreate):
     model = Campaign
-    fields = ['title', 'private',]
+    fields = ['title', 'focus', 'private',]
 
 @method_decorator(is_creator_permission_required(Campaign), name='dispatch')
 class Update(UpdateView):
     model = Campaign
     template_name = 'actionpods/generic/edit.html'
-    fields = ['title', 'private',]
+    fields = ['title', 'focus', 'private',]
 
 @method_decorator(is_creator_permission_required(Campaign), name='dispatch')
 class Delete(DeleteView):
@@ -56,7 +56,7 @@ class Delete(DeleteView):
 from hub.models.campaign import CampaignBlog
 
 def blog_index(request, pk):
-    return render(request, 'actionpods/campaign/blog/index.html',
+    return render(request, 'actionpods/campaigns/blog/index.html',
         {
         'posts': CampaignBlog.objects.filter(campaign_id=pk).order_by('-posted', 'title')[:5],
         }

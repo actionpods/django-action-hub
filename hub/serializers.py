@@ -7,7 +7,7 @@ from .models.campaign import Campaign
 class PodSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Pod
-        fields = ('title', 'leader', 'members', 'coalition_pods', 'action_set')
+        fields = ('creator', 'created', 'members', 'campaign_pods', 'action_set')
 
 class ActionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

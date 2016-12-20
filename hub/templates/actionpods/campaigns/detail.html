@@ -7,19 +7,23 @@
   <div class="container text-center">
     <h1>{{ campaign.title }}</h1>
     <p>{{ campaign.description }}</p>
+    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#podListing">
+		<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+	    {{ campaign.pods.all|length }} Active Pods
+    </button>
   </div>
 </div>
 
 <div class="container-fluid bg-3 text-center">
-  <h3>Our Coalitions</h3><br>
+  <h3>Our News</h3><br>
   <div class="row">
-	{% for pod in campaign.pods.all %}
-	<a href = "{% url 'actionpods:pod:detail' pod.id %}">
-		<div class="col-sm-3">
-	      <p>{{ pod.title }}</p>
-
-	    </div>
-	</a>
+	{% for blog in campaign.campaignblog_set.all %}
+	<div class="col-sm-3">
+        <a href = "{% url 'blog:view_blog_post' blog.slug %}">
+	      <h4>{{ blog.title|title}}</h4>
+        </a>
+        <p>{{ blog.body|safe|slice:"140" }}</p>
+	</div>
     {% if forloop.counter|divisibleby:4 %}
     </div>
 </div>
@@ -32,4 +36,63 @@
 </div>
 <br><br>
 
+{% endblock %}
+
+{% block modal %}
+<!-- List Pods -->
+<div class="modal fade" id="podListing" tabindex="-1" role="dialog" aria-labelledby="podListing">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="podListingLabel">Active Pods</h4>
+      </div>
+      <div class="modal-body">
+          {% for pod in campaign.pods.all %}
+          <div class="media">
+              <div class="media-body">
+                  <a href = "{% url 'actionpods:pod:detail' pod.id %}">
+                      <h4 class="media-heading">{{ pod.title }}</h4>
+                  </a>
+                  {{ pod.description|safe }}
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- List Campaigns
+<div class="modal fade" id="campaignListing" tabindex="-1" role="dialog" aria-labelledby="campaignListing">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="campaignListingLabel">Campaigns</h4>
+      </div>
+      <div class="modal-body">
+          {% for campaign in campaign.campaign_campaigns.all %}
+          <div class="media">
+              <div class="media-body">
+                  <a href = "{% url 'actionpods:campaign:detail' campaign.id %}">
+                      <h4 class="media-heading">{{ campaign.title }}</h4>
+                  </a>
+                  {{ campaign.description|safe }}
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+-->
 {% endblock %}

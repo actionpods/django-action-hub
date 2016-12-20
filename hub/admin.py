@@ -1,5 +1,5 @@
 from django.contrib import admin
-from hub.models.pod import Pod, PodCategory, Action, Role
+from hub.models.pod import Pod, Focus, Action
 from hub.models.campaign import Campaign, CampaignBlog
 from hub.models.relationships import Invitation, Blocking
 
@@ -9,7 +9,7 @@ from tinymce.widgets import TinyMCE
 ### Pods Admin Models ###
 
 class PodAdminForm(forms.ModelForm):
-    description = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
+    description = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}), error_messages={'required': 'n'})
     class Meta:
         model = Pod
         fields = '__all__'
@@ -17,24 +17,23 @@ class PodAdminForm(forms.ModelForm):
 class PodAdmin(admin.ModelAdmin):
     exclude = ['creator', 'created']
     form = PodAdminForm
-    list_display = ["id", "title", "creator", "created", "private"]
+    list_display = ["id", "creator", "created", "focus", "private"]
+    list_display_links = ('id', 'creator')
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'creator', None) is None:
             obj.creator = request.user
         obj.save()
 
-class PodCategoryAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('title',)}
+class FocusAdmin(admin.ModelAdmin):
+    exclude = ['slug']
 
 class PodInline(admin.StackedInline):
     model = Pod
 
 admin.site.register(Pod, PodAdmin)
-admin.site.register(PodCategory, PodCategoryAdmin)
+admin.site.register(Focus, FocusAdmin)
 
 ### Action Admin Models
-class RoleInline(admin.StackedInline):
-    model = Role
 
 class ActionAdminForm(forms.ModelForm):
     description = forms.CharField()
@@ -43,10 +42,8 @@ class ActionAdminForm(forms.ModelForm):
         fields = '__all__'
 
 class ActionAdmin(admin.ModelAdmin):
-    exclude = ['creator', 'created']
+    exclude = ['creator', 'created', 'slug']
     form = ActionAdminForm
-    inlines = [RoleInline,]
-    prepopulated_fields = {'slug': ('title',), }
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'creator', None) is None:
             obj.creator = request.user
@@ -59,21 +56,34 @@ class CampaignAdminForm(forms.ModelForm):
         fields = '__all__'
 
 class CampaignAdmin(admin.ModelAdmin):
-    exclude = ['creator', 'created']
+    exclude = ['creator', 'created', 'slug']
     list_display = ["id", "title", "creator", "created", "private"]
+    list_display_links = ('id','title', 'creator')
     form = CampaignAdminForm
-    prepopulated_fields = {
-                           'slug': ('title',),
-                           }
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'creator', None) is None:
             obj.creator = request.user
         obj.save()
 
-admin.site.register(Role)
 admin.site.register(Action, ActionAdmin)
 admin.site.register(Campaign, CampaignAdmin)
 
+class CampaignBlogAdminForm(forms.ModelForm):
+    #Set the editor to a WYSIWYG or Markdown
+    #NOTE: Be sure to edit the template to reflect a change.
+    body = forms.CharField(widget=TinyMCE())
+    class Meta:
+        model = CampaignBlog
+        fields = '__all__'
+
+class CampaignBlogAdmin(admin.ModelAdmin):
+    exclude = ['posted']
+    form = CampaignBlogAdminForm
+    prepopulated_fields = {
+                           'slug': ('title',),
+                           }
+
+admin.site.register(CampaignBlog, CampaignBlogAdmin)
 class RelationshipAdmin(admin.ModelAdmin):
     list_display = ["id", "campaign", "pod", "added"]
 

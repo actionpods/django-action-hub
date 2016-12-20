@@ -34,7 +34,7 @@ class Detail(DetailView):
 class Create(BaseCreate):
     model = Pod
     template_name = 'actionpods/generic/create.html'
-    fields = ['title', 'description', 'team_size', 'private',]
+    fields = ['focus', 'team_size', 'private',]
 
     def form_valid(self, form):
         form.instance.leader = self.request.user

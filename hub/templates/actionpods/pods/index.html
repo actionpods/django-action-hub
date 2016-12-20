@@ -17,8 +17,8 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>Title</th>
 					<th>Leader</th>
+					<th>Focus</th>
 					<th>Members</th>
 					<th>Coalitions</th>
 				</tr>
@@ -27,8 +27,8 @@
 				{% for pod in object_list %}
 				<tr>
 					<th scope="row">{{ pod.id }}</th>
-					<td><a href = "{% url 'actionpods:pod:detail' pod.id %}">{{ pod.title }}</a></td>
-					<td>{{ pod.leader }}</td>
+					<td><a href = "{% url 'actionpods:pod:detail' pod.id %}">{{ pod.creator.username|title }}</a></td>
+					<td>{{ pod.focus.title }}</td>
 					<td>{{ pod.team_size }}</td>
 					<td>{{ pod.coalition_pods.all|length }}</td>
 				</tr>
