@@ -1,69 +1,157 @@
 {% extends "base/base.html" %}
+{% load staticfiles %}
 {% block title %}{{ object.creator.username|title }}'s {{ object.focus.title }} Pod{% endblock %}
-
+{% block head %}
+{{ block.super }}
+<link href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="{% static 'pods/detail.css' %}" rel="stylesheet" />
+<link href="{% static 'pods/notices.css' %}" rel="stylesheet" />
+{% endblock %}
 {% block content %}
-<div class="container">
-    <div class = "row">
-        <div class="col-md-7">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-9">
-                            <div><h1 class="panel-title">{{ object.creator.username|title }}'s {{ object.focus.title }} Pod</h1></div>
-                        </div>
-                        <div class="col-xs-3 text-right">
-                            <div class="huge">{{ object.team_size }} <span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
-                        </div>
+    <div class="row user-menu-container square">
+        <div class="col-md-12 user-details">
+            <div class="row darkbluebg white">
+                <div class="col-md-6 no-pad">
+                    <div class="user-pad">
+                        <h3>{{ pod.title|title }}
+                            {% if request.user == pod.creator %}
+                            <a href="{% url 'actionpods:pod:edit' pod.id %}">
+                            <button type="button" class="btn btn-labeled btn-info" >
+                                <span class="btn-label"><i class="fa fa-pencil"></i></span>Update
+                            </button>
+                            </a>
+                            {% endif %}
+                        </h3>
+                        <h4 class="white"><i class="fa fa-check-circle-o"></i><strong> {{ pod.pod_endorsements.all|length }}</strong></h4>
+                        <h4 class="white"><i class="fa fa-id-card-o"></i> San Antonio, TX</h4>
+                        <h4 class="white"><i class="fa fa-twitter"></i> {{ pod.creator.username|title }}</h4>
+                        <h4 class="white"><i class="fa fa-facebook"></i> {{ pod.creator.username|title }}</h4>
+                        <h4 class="white"><i class="fa fa-linkedin-square"></i> {{ pod.creator.username|title }}</h4>
+
                     </div>
                 </div>
-                    <div class="panel-footer">
-                        <div>{{ object.description|safe }}</div>
-                        <div class="clearfix"></div>
+                <div class="col-md-6 no-pad">
+                    <div class="container">
+                        <h3>Actions
+                        {% if request.user == pod.creator %}
+                            <a href = "{% url 'actionpods:action_create' pod.id %}">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </a>
+                        {% endif %}
+                        </h3>
+                        {% for action in object.action_set.all %}
+                        <div class="notice notice-{{action.category.color}}">
+                            <strong>{{ action.category.title|title }}</strong> {{ action.title|title }}
+                            {% if request.user == pod.creator %}
+                            <a href = "{% url 'actionpods:action:delete' action.slug %}"> DELETE </a>
+                                {% endif %}
+                        </div>
+                        {% endfor %}
                     </div>
-            </div>
-
-            <hr>
-                <h4> Current Actions
-                    <a href = "{% url 'actionpods:action_create' pod.id %}">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    </a>
-                </h4>
-
-                {% for action in object.action_set.all %}
-                <div class="well well-lg">
-                    <a href ="{% url 'actionpods:action:detail' action.slug %}">{{ action.title|title }}</a><br> {{ action.description|slice:":255"|safe }}
                 </div>
-                {% endfor %}
-            </ul>
+            </div>
+            <div class="row overview button-group-horizontal">
+                <div class="col-md-4 user-pad text-center">
+                <a class="btn btn-block btn-default" href="#" type="button" data-toggle="modal" data-target="#membersList">
+                    <h3>Members</h3>
+                    <h4>{{ pod.team_size }}</h4>
+                    <strong>({{ pod.members.all|length }} Registered)</strong>
+                </a>
+                </div>
+                <div class="col-md-4 user-pad text-center">
+                <a class="btn btn-block btn-default" href="#" type="button" data-toggle="modal" data-target="#campaignsList">
+                    <h3>Campaigns</h3>
+                    <h4>{{ pod.campaign_pods.all|length }}</h4>
+                </a>
+                </div>
+                <div class="col-md-4 user-pad text-center">
+                <a class="btn btn-block btn-default" href="#" type="button" data-toggle="modal" data-target="#alliesList">
+                    <h3>Allied Pods</h3>
+                    <h4>{{ pod.ally_pods.all|length }}</h4>
+                </a>
+                </div>
+            </div>
         </div>
-        <div class="col-md-5">
-            <a href ="{% url 'actionpods:user:detail' object.creator.pk %}">
-                <button type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                     {{ object.creator.username }}
-                </button>
-            </a>
-            <h4>Campaigns</h4>
-            <div class="list-group">
-                {% for campaign in object.campaign_pods.all %}
-                <a href ="{% url 'actionpods:campaign:detail' campaign.pk %}" class="list-group-item">{{ campaign.title }}</a>
-                {% endfor %}
-            </div>
-            <hr>
-            <p>Registered Members:</p>
-            <div class="list-group">
-            {% for member in object.members.all %}
-                <a href ="{% url 'actionpods:user:detail' member.pk %}" class="list-group-item">{{ member.username }}</a>
-            {% endfor %}
-            </div>
         </div>
     </div>
-    <div class = "row">
-        <div class="col-md-12">
-            <hr>
-        </div>
-    </div>
+{% endblock %}
 
+{% block modal %}
+<!-- List Members -->
+<div class="modal fade" id="membersList" tabindex="-1" role="dialog" aria-labelledby="membersList">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="membersListLabel">Registered Members</h4>
+      </div>
+      <div class="modal-body">
+          {% for member in pod.members.all %}
+          <div class="media">
+              <div class="media-body">
+                  <a href = "{% url 'actionpods:user:detail' member.id %}">
+                      <h4 class="media-heading">{{ member.username|title }}</h4>
+                  </a>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- List Campaigns -->
+<div class="modal fade" id="campaignsList" tabindex="-1" role="dialog" aria-labelledby="campaignsList">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="campaignsListLabel">Campaigns</h4>
+      </div>
+      <div class="modal-body">
+          {% for campaign in pod.campaign_pods.all %}
+          <div class="media">
+              <div class="media-body">
+                  <a href = "{% url 'actionpods:campaign:detail' campaign.id %}">
+                      <h4 class="media-heading">{{ campaign.title|title }}</h4>
+                  </a>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- List Allies -->
+<div class="modal fade" id="alliesList" tabindex="-1" role="dialog" aria-labelledby="alliesList">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="alliesListLabel">Allied Pods</h4>
+      </div>
+      <div class="modal-body">
+          {% for ally in pod.ally_pods.all %}
+          <div class="media">
+              <div class="media-body">
+                  <a href = "{% url 'actionpods:pod:detail' ally.id %}">
+                      <h4 class="media-heading">{{ ally.title|title }}</h4>
+                  </a>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

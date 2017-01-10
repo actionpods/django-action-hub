@@ -1,7 +1,7 @@
 from django.contrib import admin
-from hub.models.pod import Pod, Focus, Action
+from hub.models.pod import Pod, Focus, Action, ActionCategory
 from hub.models.campaign import Campaign, CampaignBlog
-from hub.models.relationships import Invitation, Blocking
+from hub.models.relationships import Invitation, Blocking, HubProfile
 
 from django import forms
 from tinymce.widgets import TinyMCE
@@ -9,13 +9,13 @@ from tinymce.widgets import TinyMCE
 ### Pods Admin Models ###
 
 class PodAdminForm(forms.ModelForm):
-    description = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}), error_messages={'required': 'n'})
+    #description = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}), error_messages={'required': 'n'})
     class Meta:
         model = Pod
         fields = '__all__'
 
 class PodAdmin(admin.ModelAdmin):
-    exclude = ['creator', 'created']
+    exclude = ['creator', 'created', 'admin']
     form = PodAdminForm
     list_display = ["id", "creator", "created", "focus", "private"]
     list_display_links = ('id', 'creator')
@@ -31,12 +31,13 @@ class PodInline(admin.StackedInline):
     model = Pod
 
 admin.site.register(Pod, PodAdmin)
+admin.site.register(HubProfile)
 admin.site.register(Focus, FocusAdmin)
 
 ### Action Admin Models
 
 class ActionAdminForm(forms.ModelForm):
-    description = forms.CharField()
+    #description = forms.CharField()
     class Meta:
         model = Action
         fields = '__all__'
@@ -66,6 +67,7 @@ class CampaignAdmin(admin.ModelAdmin):
         obj.save()
 
 admin.site.register(Action, ActionAdmin)
+admin.site.register(ActionCategory)
 admin.site.register(Campaign, CampaignAdmin)
 
 class CampaignBlogAdminForm(forms.ModelForm):

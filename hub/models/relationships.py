@@ -7,6 +7,12 @@ from hub.models.pod import Pod
 from hub.models.campaign import Campaign
 from django.db.models import Q
 
+from accounts.models import Profile
+
+class HubProfile(Profile):
+    pod_endorsements = models.ManyToManyField(Pod, related_name='pod_endorsements')
+    campaign_endorsements = models.ManyToManyField(Campaign, related_name='campaign_endorsements')
+
 class InvitationManager(models.Manager):
 
     def remove(self, campaign, pod):

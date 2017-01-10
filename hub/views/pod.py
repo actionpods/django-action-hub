@@ -48,7 +48,7 @@ class Create(BaseCreate):
 class Update(UpdateView):
     model = Pod
     template_name = 'actionpods/generic/edit.html'
-    fields = ['title', 'description', 'team_size', 'private',]
+    fields = ['focus', 'team_size', 'private',]
     #permission_required = 'actionpods.change_pod'
 
 @method_decorator(is_creator_permission_required(Pod), name='dispatch')

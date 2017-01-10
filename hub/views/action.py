@@ -21,7 +21,7 @@ class Detail(DetailView):
 class Create(CreateView):
     model = Action
     template_name = 'actionpods/actions/create.html'
-    fields = ['title', 'description', 'start_time', 'end_time']
+    fields = ['title', 'category']
     def get_success_url(self):
         return reverse('actionpods:pod:detail', args=(self.kwargs['pk'],))
     def form_valid(self, form):
@@ -38,4 +38,5 @@ class Update(UpdateView):
 class Delete(DeleteView):
     model = Action
     template_name = 'actionpods/generic/delete.html'
-    success_url = reverse_lazy('actionpods:pod:detail')
+    def get_success_url(self):
+        return reverse('actionpods:pod:index')
